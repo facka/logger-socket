@@ -9,6 +9,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var opener = require('opener');
 var port = process.env.PORT || 3003;
 
 var os=require('os');
@@ -34,21 +35,21 @@ server.listen(port, function () {
   console.log('Server listening at port %d', port);
   console.log('Append this code in the client:');
   console.log('<script id="logger" src="http://'+ipAddress+':3003/console-log.js"></script>');
-  console.log('Go to http://facka.github.io/logger-web/ to connect to this logger');
+  console.log('Opening http://localhost:3003 to see the console log');
 });
+
+opener('http://localhost:' + port);
 
 app.use(express.static(__dirname + '/public/'));
 
 var connections = {};
 var logReaders = {};
+var readers = {};
 
 io.on('connection', function (socket) {
 
-    console.log('Connected new socket');
-
     //logData = { clientId: '23424sdfsdfs4', message: 'abcdef'}
     socket.on('log', function (logData) {
-
         if (!fs.existsSync('./' + logData.clientId)){
             fs.mkdirSync('./' + logData.clientId);
             connections[socket.id] = logData.clientId;
@@ -56,28 +57,40 @@ io.on('connection', function (socket) {
 
         var filename = './' + logData.clientId + '/console.log';
         fs.appendFile(filename, logData.message);
+
+    });
+
+    socket.on('register', function(value) {
+        if (value.type === 'reader') {
+            readers[socket.id] = socket;
+        }
+        if (value.type === 'writer') {
+            for (var socketId in readers) {
+                readers[socketId].emit('newPanel', {
+                    host: 'localhost',
+                    port: port,
+                    path: value.clientId,
+                    file: 'console.log'
+                });
+                readers[socketId].newPanelNotified = true;
+            }
+        }
     });
 
     socket.on('checkfile', function (data) {
-        console.log(JSON.stringify(data));
         var filename = './' + (data.path ?  data.path + '/' : '') + data.file;
-        console.log('Checking file: ' + filename);
         fs.exists(filename, function(exists) {
             if (exists) {
-                console.log('Emit ready!');
                 socket.emit('ready', filename);
             } else {
-                console.log('file not found.');
                 socket.emit('logger_error', 'FILE_NOT_FOUND');
             }
         });
     });
 
     socket.on('start', function (filename) {
-        console.log('starting logger');
         var tailProcess = spawn('tail', ['-f', filename]);
         tailProcess.stdout.on('data', function (data) {
-          console.log('sending data...' + data);
           socket.emit('data', ''+data);
         });
         logReaders[socket.id] = tailProcess;
@@ -105,6 +118,10 @@ io.on('connection', function (socket) {
             tailProcess.kill();
             tailProcess = null;
             delete logReaders[socket.id];
+        }
+
+        if (readers[socket.id]) {
+            delete readers[socket.id];
         }
 
     });

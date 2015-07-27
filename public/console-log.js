@@ -7036,8 +7036,12 @@ function toArray(list, index) {
       clientId = localStorage.loggerId;
     }
 
-
     console.log('LOGGER_SOCKET >>> clientId: ' + clientId);
+
+    socket.emit('register', {
+      type: 'writer',
+      clientId: clientId
+    });
 
     console.log = function() {
         var msgs = [],

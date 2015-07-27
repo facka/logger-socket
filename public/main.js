@@ -5,7 +5,7 @@ angular.module('loggerApp', ['mgcrea.ngStrap','ngAnimate','ngStorage'])
 
     container.close = function(id) {
         PanelsService.removePanel(id);
-    }
+    };
   }]);
 
 angular.module('loggerApp').controller('HeaderController', ['$scope','PanelsService', '$modal', function($scope, PanelsService, $modal) {
@@ -46,7 +46,7 @@ angular.module('loggerApp').directive('highlight', function() {
         },
         link: function (scope, element) {
             var value = element[0].innerHTML.trim();
-            var message = scope.$parent.$eval(value.substring(2, value.length - 2));;
+            var message = scope.$parent.$eval(value.substring(2, value.length - 2));
 
             scope.$watch(function() {
                 return scope.highlight;
@@ -58,7 +58,7 @@ angular.module('loggerApp').directive('highlight', function() {
                 else {
                     element[0].innerHTML = message;
                 }
-            })
+            });
         }
     };
 });
@@ -77,7 +77,7 @@ angular.module('loggerApp').directive('scrollBottom', function() {
     };
 });
 
-angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorage', function(Panel, $q, $localStorage) {
+angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorage','$timeout', function(Panel, $q, $localStorage, $timeout) {
         var _this = this;
         this.panels = {};
 
@@ -111,7 +111,7 @@ angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorag
                     reject(error);
                 });
             });
-        }
+        };
 
         this.addPanel = function(panel) {
             this.panels[panel.id] = panel;
@@ -124,6 +124,21 @@ angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorag
                 delete this.panels[id];
             }
         };
+
+        var socket = io('http://localhost:3003');
+
+        socket.emit('register', { type: 'reader' });
+
+        socket.on('newPanel', function(config) {
+            _this.createPanel(config).then(function(panel) {
+                $timeout(function() {
+                    console.log('Panel added');
+                    _this.addPanel(panel);
+                });
+            }, function() {
+                console.log('Error creating panel: ', config);
+            });
+        });
 
         load();
 }]);
