@@ -1,0 +1,33 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog am-fade-and-slide-top" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">New Panel</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Host</label>
+                    <input type="text" class="form-control" ng-model="config.host">
+                </div>
+                <div class="form-group">
+                    <label>Port</label>
+                    <input type="text" class="form-control" ng-model="config.port">
+                </div>
+                <div class="form-group">
+                    <label>Path</label>
+                    <input type="text" class="form-control" ng-model="config.path">
+                </div>
+                <div class="form-group">
+                    <label>File</label>
+                    <input type="text" class="form-control" ng-model="config.file">
+                </div>
+                <div ng-if="errors.length" class="form-group error">
+                    <span ng-repeat="error in errors">{{error}}</span>
+                </div>
+                <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="save()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

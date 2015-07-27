@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Logger</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <link rel="stylesheet" type="text/css" href="styles/angular-motion.css">
+</head>
+<body ng-app="loggerApp">
+  <header ng-controller="HeaderController as header">
+      <button class="btn" ng-click="header.openNewPanelModal()">+ New Screen</button>
+  </header>
+  <div class="panel-box" ng-controller="PanelContainerController as panelContainer">
+      <article ng-repeat="panel in panelContainer.panels" class="panel-box__item">
+          <header class="panel-box__item__header">
+              <h2>
+                  {{panel.config.host + ':' + panel.config.port + ( panel.config.path ? '/' + panel.config.path : '') + '/' + panel.config.file}}
+              </h2>
+              <img ng-if="panel.status === 'PAUSED'" src="images/play.svg" alt="" ng-click="panel.play()">
+              <img ng-if="panel.status === 'PLAYING'" src="images/pause.svg" alt="" ng-click="panel.pause()">
+              <input type="text" ng-model="panel.searchText" ng-change="panel.refresh()" class="form-control" placeholder="Filter" aria-describedby="basic-addon3">
+              <div>
+                  <img src="images/edit.svg" alt="" data-toggle="modal" data-target="#myModal">
+                  <img src="images/close-black.svg" alt="" ng-click="panelContainer.close(panel.id)">
+              </div>
+          </header>
+          <section class="panel-box__item__body">
+              <div class="panel-box__item__text" scroll-bottom="panel.setScrollBottom">
+                  <p ng-repeat="line in panel.filteredLog track by line.id">
+                      <span class="message" highlight="panel.searchText">{{line.value}}</span>
+                  </p>
+              </div>
+          </section>
+      </article>
+  </div>
+
+  <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-body">
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox"> Live
+                      </label>
+                  </div>
+                  <div class="form-group">
+                      <label for="date">Select Date</label>
+                      <input type="date" class="form-control" id="date">
+                  </div>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-animate.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.tpl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.js"></script>
+  <script src="/socket.io.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>
