@@ -23,7 +23,7 @@ function getIp(details){
 }
 
 for (var dev in ifaces) {
-    if(dev !== 'eth0') {
+    if(dev !== 'eth0' && dev !== 'wlan0') {
         continue;
     }
     ifaces[dev].forEach(getIp);
