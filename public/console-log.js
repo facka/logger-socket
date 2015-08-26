@@ -7016,6 +7016,10 @@ function toArray(list, index) {
 
     var orig = console.log;
 
+    document.addEventListener("DOMContentLoaded", function(event) {
+      testInfo.textContent = 'loading!';
+    });
+
     function makeId() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -7028,15 +7032,26 @@ function toArray(list, index) {
     }
 
     var clientId;
-    if (!localStorage.loggerId) {
-      clientId = makeId();
-      localStorage.setItem("loggerId", clientId);
+    if (localStorage) {
+      if (!localStorage.loggerId) {
+        clientId = makeId();
+        localStorage.setItem("loggerId", clientId);
+      }
+      else {
+        clientId = localStorage.loggerId;
+      }
     }
     else {
-      clientId = localStorage.loggerId;
+      clientId = makeId();
     }
 
     console.log('LOGGER_SOCKET >>> clientId: ' + clientId);
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var testInfo = document.querySelector('pre[id="test"]');
+      testInfo.textContent = 'clientId: ' + clientId;
+    });
+
 
     socket.emit('register', {
       type: 'writer',

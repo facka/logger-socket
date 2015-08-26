@@ -90,6 +90,15 @@ angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorag
             $localStorage.panels = JSON.stringify(store);
         }
 
+        function updateStorage() {
+            var store = [];
+            for (var id in _this.panels) {
+                var panel = _this.panels[id];
+                store.push(panel.config);
+            }
+            $localStorage.panels = JSON.stringify(store);
+        }
+
         function load() {
             if ($localStorage.panels) {
                 var panels = JSON.parse($localStorage.panels);
@@ -120,8 +129,11 @@ angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorag
 
         this.removePanel = function(id) {
             if (this.panels[id]) {
-                this.panels[id].close();
-                delete this.panels[id];
+                $timeout(function() {
+                    _this.panels[id].close();
+                    delete _this.panels[id];
+                    updateStorage();
+                });
             }
         };
 
@@ -137,6 +149,20 @@ angular.module('loggerApp').service('PanelsService', ['Panel','$q','$localStorag
                 });
             }, function() {
                 console.log('Error creating panel: ', config);
+            });
+        });
+
+        socket.on('removePanel', function(config) {
+            var panels = [];
+            for (var id in _this.panels) {
+                var panel = _this.panels[id];
+                var keep = (panel.config.host === config.host) && (panel.config.port === config.port) && (panel.config.path === config.path) && (panel.config.file === config.file);
+                if (keep) {
+                    panels.push(panel);
+                }
+            }
+            panels.forEach(function(panel) {
+                _this.removePanel(panel.id);
             });
         });
 

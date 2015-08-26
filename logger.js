@@ -48,24 +48,37 @@ var readers = {};
 
 io.on('connection', function (socket) {
 
+    console.log('New connection: ', socket.id);
+
+    if (!fs.existsSync('./logs')){
+        fs.mkdirSync('./logs');
+    }
+
     //logData = { clientId: '23424sdfsdfs4', message: 'abcdef'}
     socket.on('log', function (logData) {
-        if (!fs.existsSync('./' + logData.clientId)){
-            fs.mkdirSync('./' + logData.clientId);
-            connections[socket.id] = logData.clientId;
+        if (!fs.existsSync('./logs/' + logData.clientId)){
+            fs.mkdirSync('./logs/' + logData.clientId);
         }
 
-        var filename = './' + logData.clientId + '/console.log';
+        var filename = './logs/' + logData.clientId + '/console.log';
         fs.appendFile(filename, logData.message);
 
     });
 
     socket.on('register', function(value) {
+        console.log('Register:', value);
         if (value.type === 'reader') {
             readers[socket.id] = socket;
         }
         if (value.type === 'writer') {
+            if (!fs.existsSync('./logs/' + value.clientId)){
+                fs.mkdirSync('./logs/' + value.clientId);
+            }
+            var filename = './logs/' + value.clientId + '/console.log';
+            fs.appendFile(filename, new Date() + 'Start logging...\n');
+            connections[socket.id] = value.clientId;
             for (var socketId in readers) {
+                console.log('Emit new panel');
                 readers[socketId].emit('newPanel', {
                     host: 'localhost',
                     port: port,
@@ -78,7 +91,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('checkfile', function (data) {
-        var filename = './' + (data.path ?  data.path + '/' : '') + data.file;
+        console.log('Checking file: ', data);
+        var filename = './logs/' + (data.path ?  data.path + '/' : '') + data.file;
         fs.exists(filename, function(exists) {
             if (exists) {
                 socket.emit('ready', filename);
@@ -89,6 +103,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('start', function (filename) {
+        console.log('Start: ', filename);
         var tailProcess = spawn('tail', ['-f', filename]);
         tailProcess.stdout.on('data', function (data) {
           socket.emit('data', ''+data);
@@ -106,15 +121,30 @@ io.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
+        console.log('Disconnect');
         var dir = connections[socket.id];
         //Delete folder
         if (dir) {
-            fs.unlinkSync(dir + '/console.log');
-            fs.rmdir(dir);
+            console.log('Remove file and notify');
+
+            if (!fs.existsSync('./logs/' + dir + '/console.log')){
+                fs.unlinkSync('./logs/' + dir + '/console.log');
+                fs.rmdir(dir);
+            }
+
+            for (var socketId in readers) {
+                console.log('Emit remove panel');
+                readers[socketId].emit('removePanel', {
+                    host: 'localhost',
+                    port: port,
+                    path: dir,
+                    file: 'console.log'
+                });
+            }
         }
         var tailProcess = logReaders[socket.id];
-        console.log('Killing tail process');
         if (tailProcess) {
+            console.log('Killing tail process');
             tailProcess.kill();
             tailProcess = null;
             delete logReaders[socket.id];
