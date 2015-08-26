@@ -13,7 +13,7 @@ npm install logger-socket -g
 ##Run
 Execute in the shell
 ```javascript
-looger-socket
+logger-socket
 ```
 
 This command starts a server that will serve a js file that you have to inject in the html file that you want to see the console log. Also it opens a web page where you can see the log.
