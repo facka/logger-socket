@@ -1,0 +1,101 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.11.1
+3 info using node@v0.10.25
+4 verbose node symlink /usr/bin/node
+5 verbose publish [ '.' ]
+6 silly cache add args [ '.', null ]
+7 verbose cache add spec .
+8 silly cache add parsed spec { raw: '.',
+8 silly cache add   scope: null,
+8 silly cache add   name: null,
+8 silly cache add   rawSpec: '.',
+8 silly cache add   spec: '/home/fcrego/logger-socket/github/logger-socket',
+8 silly cache add   type: 'directory' }
+9 verbose addLocalDirectory /home/fcrego/.npm/logger-socket/0.1.0/package.tgz not in flight; packing
+10 verbose tar pack [ '/home/fcrego/.npm/logger-socket/0.1.0/package.tgz',
+10 verbose tar pack   '/home/fcrego/logger-socket/github/logger-socket' ]
+11 verbose tarball /home/fcrego/.npm/logger-socket/0.1.0/package.tgz
+12 verbose folder /home/fcrego/logger-socket/github/logger-socket
+13 info prepublish logger-socket@0.1.0
+14 verbose addLocalTarball adding from inside cache /home/fcrego/.npm/logger-socket/0.1.0/package.tgz
+15 silly cache afterAdd logger-socket@0.1.0
+16 verbose afterAdd /home/fcrego/.npm/logger-socket/0.1.0/package/package.json not in flight; writing
+17 verbose afterAdd /home/fcrego/.npm/logger-socket/0.1.0/package/package.json written
+18 silly publish { name: 'logger-socket',
+18 silly publish   version: '0.1.0',
+18 silly publish   description: 'Stream logs through sockets',
+18 silly publish   main: 'logger.js',
+18 silly publish   scripts: {},
+18 silly publish   repository:
+18 silly publish    { type: 'git',
+18 silly publish      url: 'git+https://github.com/facka/logger-socket.git' },
+18 silly publish   keywords: [ 'log', 'socket', 'logger' ],
+18 silly publish   author: { name: 'Facundo Crego' },
+18 silly publish   license: 'BSD-2-Clause',
+18 silly publish   bugs: { url: 'https://github.com/facka/logger-socket/issues' },
+18 silly publish   devDependencies: {},
+18 silly publish   dependencies:
+18 silly publish    { async: '^1.4.0',
+18 silly publish      express: '^4.13.1',
+18 silly publish      opener: '^1.4.1',
+18 silly publish      'socket.io': '^1.3.5' },
+18 silly publish   bin: { 'logger-socket': 'logger.js' },
+18 silly publish   preferGlobal: 'true',
+18 silly publish   readme: '# logger-socket\n\n[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ENM9QQ3ZM8NTE "Donate once-off to this project using Paypal")\n\n[![NPM](https://nodei.co/npm/logger-socket.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/logger-socket/)\n\nStream the console log to a socket and serve a webpage to see it. Useful for debugging web pages in a mobile\n\n##Install\nnpm install logger-socket -g\n\n\n##Run\nExecute in the shell\n```javascript\nlogger-socket\n```\n\nThis command starts a server that will serve a js file that you have to inject in the html file that you want to see the console log. Also it opens a web page where you can see the log.\n\nExample of the output of the command:\n\n```javascript\nIP: 192.168.1.160\nServer listening at port 3003\nAppend this code in the client:\n<script id="logger" src="http://192.168.1.160:3003/console-log.js"></script>\nOpening http://localhost:3003 to see the console log\n```\n\nNow you are ready to see the console log while you navigate from any device :)\n\n\n\n',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: 'a5613ae444bd9c14947224db208d3392115d41e3',
+18 silly publish   homepage: 'https://github.com/facka/logger-socket#readme',
+18 silly publish   _id: 'logger-socket@0.1.0',
+18 silly publish   _shasum: '4611232bacbe1db77313050a51208081cb1470eb',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name logger-socket
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/logger-socket
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /home/fcrego/.npm/logger-socket/0.1.0/package.tgz
+26 verbose request uri https://registry.npmjs.org/logger-socket
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 16:21:01
+29 verbose request using bearer token for auth
+30 verbose request id 69fc74accd14c583
+31 http request PUT https://registry.npmjs.org/logger-socket
+32 http 403 https://registry.npmjs.org/logger-socket
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=60',
+33 verbose headers   'content-length': '95',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Fri, 28 Aug 2015 19:21:07 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-atl6232-ATL',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1440789666.931553,VS0,VE963' }
+34 verbose request invalidating /home/fcrego/.npm/registry.npmjs.org/logger-socket on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 0.1.0." : logger-socket
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:247:14)
+36 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:170:14)
+36 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:354:22)
+36 verbose stack     at Request.EventEmitter.emit (events.js:98:17)
+36 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1207:14)
+36 verbose stack     at Request.EventEmitter.emit (events.js:117:20)
+36 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1153:12)
+36 verbose stack     at IncomingMessage.EventEmitter.emit (events.js:117:20)
+36 verbose stack     at _stream_readable.js:920:16
+36 verbose stack     at process._tickCallback (node.js:415:13)
+37 verbose statusCode 403
+38 verbose pkgid logger-socket
+39 verbose cwd /home/fcrego/logger-socket/github/logger-socket
+40 error Linux 3.13.0-62-generic
+41 error argv "node" "/usr/local/bin/npm" "publish"
+42 error node v0.10.25
+43 error npm  v2.11.1
+44 error code E403
+45 error "You cannot publish over the previously published version 0.1.0." : logger-socket
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
