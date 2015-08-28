@@ -61,7 +61,7 @@ io.on('connection', function (socket) {
         }
 
         var filename = './logs/' + logData.clientId + '/console.log';
-        fs.appendFile(filename, logData.message);
+        fs.appendFile(filename, logData.message + '\n');
 
     });
 

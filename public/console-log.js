@@ -7047,10 +7047,10 @@ function toArray(list, index) {
 
     console.log('LOGGER_SOCKET >>> clientId: ' + clientId);
 
-    document.addEventListener("DOMContentLoaded", function(event) {
+    /*document.addEventListener("DOMContentLoaded", function(event) {
       var testInfo = document.querySelector('pre[id="test"]');
       testInfo.textContent = 'clientId: ' + clientId;
-    });
+    });*/
 
 
     socket.emit('register', {
