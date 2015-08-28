@@ -7059,10 +7059,9 @@ function toArray(list, index) {
     });
 
     console.log = function() {
-        var msgs = [],
-            prefix = (window == top ? '[root]' : '[' + window.name + ']');
+        var msgs = [];
         while(arguments.length) {
-            msgs.push(prefix + ': ' + [].shift.call(arguments));
+            msgs.push([].shift.call(arguments));
         }
         socket.emit('log', {
             clientId: clientId,

@@ -1,6 +1,6 @@
 {
   "name": "logger-socket",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Stream logs through sockets",
   "main": "logger.js",
   "scripts": {},
