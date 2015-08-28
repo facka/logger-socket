@@ -7016,9 +7016,9 @@ function toArray(list, index) {
 
     var orig = console.log;
 
-    document.addEventListener("DOMContentLoaded", function(event) {
+    /*document.addEventListener("DOMContentLoaded", function(event) {
       testInfo.textContent = 'loading!';
-    });
+    });*/
 
     function makeId() {
         var text = "";
